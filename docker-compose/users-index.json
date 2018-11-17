@@ -1,0 +1,10 @@
+{
+  "mappings" : {
+    "user" : {
+      "properties" : {
+        "name" : { "type" : "text" },
+        "birthdate" : { "type" : "text" }
+      }
+    }
+  }
+}
