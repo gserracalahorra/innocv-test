@@ -1,6 +1,8 @@
 # innocv-test
 Technical proof for InnoCV
 
+chmod 755 launch-application.sh
+
 1 - Startup containers
 
 sudo docker-compose up
@@ -28,3 +30,5 @@ curl -X PUT -H 'Content-Type: application/json' -i http://localhost/crm/_mapping
         }
     }
 }'
+
+4 - Test the endpoints
