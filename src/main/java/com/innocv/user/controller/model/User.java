@@ -1,4 +1,4 @@
-package com.innocv.user.handler.domain;
+package com.innocv.user.controller.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

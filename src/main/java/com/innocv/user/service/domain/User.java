@@ -1,4 +1,5 @@
-package com.innocv.user.router.model;
+package com.innocv.user.service.domain;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
