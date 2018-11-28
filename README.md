@@ -16,9 +16,9 @@ curl -X PUT -H 'Content-Type: application/json' -i http://localhost/crm --data '
     }
 }'
 
-3 - Create 'user' type
+3 - Create 'userEntity' type
 
-curl -X PUT -H 'Content-Type: application/json' -i http://localhost/crm/_mapping/user --data '{
+curl -X PUT -H 'Content-Type: application/json' -i http://localhost/crm/_mapping/userEntity --data '{
     "properties": {
         "name": {
             "type": "text"
