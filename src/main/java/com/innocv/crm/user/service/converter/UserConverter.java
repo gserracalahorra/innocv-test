@@ -7,10 +7,25 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+/**
+ *  Use this class to convert elasticsearch maps to user domain and viceversa
+ */
 @Component("domain-repository")
 public class UserConverter {
 
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+    public Map<String, Object> fromDomainToMap(final User domain) {
+        final Map<String, Object> user = new HashMap<>();
+
+        if (!Objects.isNull(domain.getId())) {
+            user.put("id", domain.getId());
+        }
+
+        user.put("name", domain.getName());
+        user.put("birthday", domain.getBirthday());
+        return user;
+    }
 
     public User fromMapToDomain(final Map<String, Object> fields) {
         String id = (String) fields.get("id");
