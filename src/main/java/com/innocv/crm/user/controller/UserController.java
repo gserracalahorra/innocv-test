@@ -6,9 +6,12 @@ import com.innocv.crm.user.service.UserService;
 import com.innocv.crm.user.service.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -33,6 +36,13 @@ public class UserController {
         List<User> userList = userService.findAll();
         return userList.stream().map(userConverter::fromDomainToModel)
                 .collect(Collectors.toList());
+    }
+
+    @PostMapping
+    public ResponseEntity<Map<String, Object>> create(@RequestBody UserModel user) {
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(userService.create(userConverter.fromModelToDomain(user)));
     }
 
 }

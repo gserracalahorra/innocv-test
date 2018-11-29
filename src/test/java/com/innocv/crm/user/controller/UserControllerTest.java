@@ -2,7 +2,9 @@ package com.innocv.crm.user.controller;
 
 import com.innocv.crm.user.controller.model.UserModel;
 import com.innocv.crm.user.exception.ContentNotFoundException;
+import com.innocv.crm.user.exception.InternalServerException;
 import com.innocv.crm.user.exception.ResourceNotFoundException;
+import com.innocv.crm.user.service.UserMockFactory;
 import com.innocv.crm.user.service.UserService;
 import com.innocv.crm.user.controller.converter.UserConverter;
 import com.innocv.crm.user.service.domain.User;
@@ -11,10 +13,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -82,6 +86,34 @@ public class UserControllerTest {
     public void findCustomerById_NoContentTest() {
         when(userService.findAll()).thenThrow(new ContentNotFoundException());
         userController.findAll();
+    }
+
+    @Test
+    public void createTest() {
+        User user = mock(User.class);
+
+        when(userConverter.fromModelToDomain(any())).thenReturn(user);
+
+        Map<String, Object> responseMap = mock(Map.class);
+
+        when(userService.create(user)).thenReturn(responseMap);
+
+        ResponseEntity<Map<String, Object>> response = userController.create(mock(UserModel.class));
+
+        assertNotNull(response);
+    }
+
+    @Test(expected = InternalServerException.class)
+    public void createFailTest() {
+        User user = mock(User.class);
+
+        when(userConverter.fromModelToDomain(any())).thenReturn(user);
+
+        Map<String, Object> responseMap = mock(Map.class);
+
+        when(userService.create(user)).thenThrow(new InternalServerException());
+
+        userController.create(mock(UserModel.class));
     }
 
 }

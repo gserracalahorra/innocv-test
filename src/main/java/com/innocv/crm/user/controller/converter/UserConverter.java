@@ -11,4 +11,8 @@ public class UserConverter {
         return new UserModel(domain.getId(), domain.getName(), domain.getBirthday());
     }
 
+    public User fromModelToDomain(UserModel model) {
+        return new User(model.getId(), model.getName(), model.getBirthday());
+    }
+
 }

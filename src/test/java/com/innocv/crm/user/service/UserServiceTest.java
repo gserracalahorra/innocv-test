@@ -1,11 +1,17 @@
 package com.innocv.crm.user.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.innocv.crm.user.JsonStringFactory;
 import com.innocv.crm.user.exception.ContentNotFoundException;
+import com.innocv.crm.user.exception.InternalServerException;
 import com.innocv.crm.user.exception.ResourceNotFoundException;
 import com.innocv.crm.user.repository.UserRepository;
+import com.innocv.crm.user.service.converter.ElasticsearchConverter;
 import com.innocv.crm.user.service.converter.UserConverter;
 import com.innocv.crm.user.service.domain.User;
 import org.elasticsearch.action.get.GetResponse;
+import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
@@ -38,6 +44,12 @@ public class UserServiceTest {
     @Mock
     private UserConverter userConverter;
 
+    @Mock
+    private ElasticsearchConverter elasticsearchConverter;
+
+    @Mock
+    private ObjectMapper objectMapper;
+
     @Captor
     private ArgumentCaptor<Map<String, Object>> captor = ArgumentCaptor.forClass(Map.class);
 
@@ -45,6 +57,8 @@ public class UserServiceTest {
     public void before() {
         ReflectionTestUtils.setField(userService, "userRepository", userRepository);
         ReflectionTestUtils.setField(userService, "userConverter", userConverter);
+        ReflectionTestUtils.setField(userService, "elasticsearchConverter", elasticsearchConverter);
+        ReflectionTestUtils.setField(userService, "objectMapper", objectMapper);
     }
 
     @Test
@@ -124,6 +138,38 @@ public class UserServiceTest {
         when(userRepository.findAll()).thenReturn(searchResponse);
 
         userService.findAll();
+    }
+
+    @Test
+    public void createSuccessTest() throws JsonProcessingException {
+        String userJson = JsonStringFactory.getUserJson();
+
+        when(objectMapper.writeValueAsString(any())).thenReturn(userJson);
+
+        IndexResponse indexResponse = mock(IndexResponse.class);
+
+        when(userRepository.index(userJson)).thenReturn(indexResponse);
+
+        when(elasticsearchConverter.fromIndexResponseToMap(indexResponse)).thenReturn(mock(Map.class));
+
+        Map<String, Object> response = userService.create(UserMockFactory.createValidUser());
+
+        assertNotNull(response);
+    }
+
+    @Test(expected = InternalServerException.class)
+    public void createFailTest() throws JsonProcessingException {
+        when(objectMapper.writeValueAsString(any())).thenThrow(new MockException());
+
+        userService.create(UserMockFactory.createValidUser());
+    }
+
+    private class MockException extends JsonProcessingException {
+
+        public MockException() {
+            super("Mock exception message");
+        }
+
     }
 
 }

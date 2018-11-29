@@ -1,12 +1,16 @@
 package com.innocv.crm.user.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.innocv.crm.user.exception.ContentNotFoundException;
+import com.innocv.crm.user.exception.InternalServerException;
 import com.innocv.crm.user.exception.ResourceNotFoundException;
 import com.innocv.crm.user.repository.UserRepository;
+import com.innocv.crm.user.service.converter.ElasticsearchConverter;
 import com.innocv.crm.user.service.converter.UserConverter;
 import com.innocv.crm.user.service.domain.User;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.SearchHits;
@@ -29,6 +33,9 @@ public class UserService {
     @Autowired
     @Qualifier("domain-repository")
     private UserConverter userConverter;
+
+    @Autowired
+    private ElasticsearchConverter elasticsearchConverter;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -66,6 +73,19 @@ public class UserService {
         }
 
         throw new ContentNotFoundException();
+    }
+
+    public Map<String, Object> create(User user) {
+        log.debug("Creating user {}", user);
+        try {
+            final String json = objectMapper.writeValueAsString(user);
+            Map<String, Object> indexResponse = elasticsearchConverter.fromIndexResponseToMap(userRepository.index(json));
+            log.debug("User {} created", user);
+            return indexResponse;
+        } catch (JsonProcessingException e) {
+            log.error(ExceptionUtils.getStackTrace(e));
+            throw new InternalServerException(e.getClass(), e.getMessage());
+        }
     }
 
 }

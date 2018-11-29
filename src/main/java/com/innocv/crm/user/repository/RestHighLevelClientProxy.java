@@ -3,6 +3,8 @@ package com.innocv.crm.user.repository;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.get.GetResponse;
+import org.elasticsearch.action.index.IndexRequest;
+import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RestHighLevelClient;
@@ -33,6 +35,10 @@ public class RestHighLevelClientProxy {
 
     public SearchResponse search(SearchRequest searchRequest) throws IOException {
         return client.search(searchRequest);
+    }
+
+    public IndexResponse index(IndexRequest indexRequest) throws IOException{
+        return client.index(indexRequest);
     }
 
 }
