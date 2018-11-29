@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -86,6 +87,13 @@ public class UserService {
             log.error(ExceptionUtils.getStackTrace(e));
             throw new InternalServerException(e.getClass(), e.getMessage());
         }
+    }
+
+    public Map<String, Object> update(User user) {
+        Map<String, Object> userMap = new HashMap<>();
+        userMap.put("name", user.getName());
+        userMap.put("birthday", user.getBirthday());
+        return elasticsearchConverter.fromUpdateResponseToMap(userRepository.update(user.getId(), userMap));
     }
 
 }

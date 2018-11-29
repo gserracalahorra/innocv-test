@@ -13,6 +13,7 @@ import com.innocv.crm.user.service.domain.User;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.junit.Before;
@@ -162,6 +163,19 @@ public class UserServiceTest {
         when(objectMapper.writeValueAsString(any())).thenThrow(new MockException());
 
         userService.create(UserMockFactory.createValidUser());
+    }
+
+    @Test
+    public void updateSuccessTest() {
+        UpdateResponse updateResponse = mock(UpdateResponse.class);
+
+        when(userRepository.update(any(), any())).thenReturn(updateResponse);
+
+        when(elasticsearchConverter.fromUpdateResponseToMap(updateResponse)).thenReturn(mock(Map.class));
+
+        Map<String, Object> response = userService.update(UserMockFactory.createValidUser());
+
+        assertNotNull(response);
     }
 
     private class MockException extends JsonProcessingException {

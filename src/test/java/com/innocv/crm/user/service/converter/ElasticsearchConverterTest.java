@@ -2,6 +2,7 @@ package com.innocv.crm.user.service.converter;
 
 import org.elasticsearch.action.DocWriteResponse;
 import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.action.update.UpdateResponse;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -29,6 +30,27 @@ public class ElasticsearchConverterTest {
         when(indexResponse.getSeqNo()).thenReturn(1L);
 
         Map<String, Object> response = elasticsearchConverter.fromIndexResponseToMap(indexResponse);
+
+        assertEquals("1", response.get("id"));
+        assertEquals("crm", response.get("index"));
+        assertEquals("user", response.get("type"));
+        assertEquals(1L, response.get("version"));
+        assertEquals("created", response.get("result"));
+        assertEquals(1L, response.get("seqNo"));
+    }
+
+    @Test
+    public void fromUpdateResponseToMap() {
+        UpdateResponse updateResponse = mock(UpdateResponse.class);
+
+        when(updateResponse.getId()).thenReturn("1");
+        when(updateResponse.getIndex()).thenReturn("crm");
+        when(updateResponse.getType()).thenReturn("user");
+        when(updateResponse.getVersion()).thenReturn(1L);
+        when(updateResponse.getResult()).thenReturn(DocWriteResponse.Result.CREATED);
+        when(updateResponse.getSeqNo()).thenReturn(1L);
+
+        Map<String, Object> response = elasticsearchConverter.fromUpdateResponseToMap(updateResponse);
 
         assertEquals("1", response.get("id"));
         assertEquals("crm", response.get("index"));

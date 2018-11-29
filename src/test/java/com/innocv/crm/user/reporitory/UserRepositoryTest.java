@@ -7,6 +7,7 @@ import com.innocv.crm.user.repository.UserRepository;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.update.UpdateResponse;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,6 +16,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.io.IOException;
+import java.util.Map;
 
 import static org.mockito.Mockito.*;
 
@@ -82,10 +84,28 @@ public class UserRepositoryTest {
     }
 
     @Test(expected = InternalServerException.class)
-    public void failIndexAllTest() throws IOException {
+    public void failIndexTest() throws IOException {
         when(client.index(any())).thenThrow(new IOException());
 
         userRepository.index(JsonStringFactory.getUserJson());
+    }
+
+    @Test
+    public void successUpdateTest() throws IOException {
+        UpdateResponse updateResponse = mock(UpdateResponse.class);
+
+        when(client.update(any())).thenReturn(updateResponse);
+
+        UpdateResponse response = userRepository.update("1", mock(Map.class));
+
+        assertNotNull(response);
+    }
+
+    @Test(expected = InternalServerException.class)
+    public void failUpdateTest() throws IOException {
+        when(client.update(any())).thenThrow(new IOException());
+
+        userRepository.update("1", mock(Map.class));
     }
 
 }

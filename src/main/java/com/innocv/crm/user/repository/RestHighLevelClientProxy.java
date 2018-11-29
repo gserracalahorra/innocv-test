@@ -7,6 +7,8 @@ import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.update.UpdateRequest;
+import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -39,6 +41,10 @@ public class RestHighLevelClientProxy {
 
     public IndexResponse index(IndexRequest indexRequest) throws IOException{
         return client.index(indexRequest);
+    }
+
+    public UpdateResponse update(UpdateRequest updateRequest) throws IOException {
+        return client.update(updateRequest);
     }
 
 }

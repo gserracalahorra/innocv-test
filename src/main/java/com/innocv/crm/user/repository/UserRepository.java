@@ -9,6 +9,8 @@ import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.update.UpdateRequest;
+import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
@@ -16,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.Map;
 
 @Slf4j
 @Component
@@ -67,6 +70,17 @@ public class UserRepository {
             IndexResponse indexResponse = client.index(indexRequest);
             log.debug("Permormed POST request to /{}/{}", INDEX, TYPE);
             return indexResponse;
+        } catch (IOException e) {
+            log.error(ExceptionUtils.getStackTrace(e));
+            throw new InternalServerException(e.getClass(), e.getMessage());
+        }
+    }
+
+    public UpdateResponse update(String id, Map<String, Object> user) {
+        try {
+            final UpdateRequest updateRequest = new UpdateRequest(INDEX, TYPE, id);
+            updateRequest.doc(user);
+            return client.update(updateRequest);
         } catch (IOException e) {
             log.error(ExceptionUtils.getStackTrace(e));
             throw new InternalServerException(e.getClass(), e.getMessage());

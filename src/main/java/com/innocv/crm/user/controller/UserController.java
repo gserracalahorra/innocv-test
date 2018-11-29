@@ -45,4 +45,10 @@ public class UserController {
                 .body(userService.create(userConverter.fromModelToDomain(user)));
     }
 
+    @PutMapping("/{id}")
+    public Map<String, Object> update(@PathVariable("id") String id, @RequestBody UserModel user) {
+        user.setId(id);
+        return userService.update(userConverter.fromModelToDomain(user));
+    }
+
 }

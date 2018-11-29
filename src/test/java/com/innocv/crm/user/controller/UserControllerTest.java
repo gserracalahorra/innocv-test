@@ -57,12 +57,6 @@ public class UserControllerTest {
         assertNotNull(userResponse);
     }
 
-    @Test(expected = ResourceNotFoundException.class)
-    public void findUserById_NotFoundTest() {
-        when(userService.findById(any())).thenThrow(new ResourceNotFoundException("1234"));
-        userController.find("1234");
-    }
-
     @Test
     public void findAllByIdTest() {
         List<User> domainList = new ArrayList<>();
@@ -82,12 +76,6 @@ public class UserControllerTest {
         assertEquals(2, response.size());
     }
 
-    @Test(expected = ContentNotFoundException.class)
-    public void findCustomerById_NoContentTest() {
-        when(userService.findAll()).thenThrow(new ContentNotFoundException());
-        userController.findAll();
-    }
-
     @Test
     public void createTest() {
         User user = mock(User.class);
@@ -103,17 +91,19 @@ public class UserControllerTest {
         assertNotNull(response);
     }
 
-    @Test(expected = InternalServerException.class)
-    public void createFailTest() {
+    @Test
+    public void updateTest() {
         User user = mock(User.class);
 
         when(userConverter.fromModelToDomain(any())).thenReturn(user);
 
         Map<String, Object> responseMap = mock(Map.class);
 
-        when(userService.create(user)).thenThrow(new InternalServerException());
+        when(userService.update(user)).thenReturn(responseMap);
 
-        userController.create(mock(UserModel.class));
+        Map<String, Object> response = userController.update("1", mock(UserModel.class));
+
+        assertNotNull(response);
     }
 
 }
