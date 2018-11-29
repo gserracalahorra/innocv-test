@@ -2,12 +2,16 @@ package com.innocv.crm.user.reporitory;
 
 import com.innocv.crm.user.JsonStringFactory;
 import com.innocv.crm.user.exception.InternalServerException;
+import com.innocv.crm.user.exception.ResourceNotFoundException;
 import com.innocv.crm.user.repository.RestHighLevelClientProxy;
 import com.innocv.crm.user.repository.UserRepository;
+import org.elasticsearch.ElasticsearchStatusException;
+import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.update.UpdateResponse;
+import org.elasticsearch.rest.RestStatus;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -101,11 +105,40 @@ public class UserRepositoryTest {
         assertNotNull(response);
     }
 
+    @Test(expected = ResourceNotFoundException.class)
+    public void resourceNotFoundUpdateTest() throws IOException {
+        ElasticsearchStatusException exception = mock(ElasticsearchStatusException.class);
+
+        when(client.update(any())).thenThrow(exception);
+
+        when(exception.status()).thenReturn(RestStatus.NOT_FOUND);
+
+        userRepository.update("1", mock(Map.class));
+    }
+
     @Test(expected = InternalServerException.class)
     public void failUpdateTest() throws IOException {
         when(client.update(any())).thenThrow(new IOException());
 
         userRepository.update("1", mock(Map.class));
+    }
+
+    @Test
+    public void successDeleteTest() throws IOException {
+        DeleteResponse deleteResponse = mock(DeleteResponse.class);
+
+        when(client.delete(any())).thenReturn(deleteResponse);
+
+        DeleteResponse response = userRepository.delete("1");
+
+        assertNotNull(response);
+    }
+
+    @Test(expected = InternalServerException.class)
+    public void failDeleteTest() throws IOException {
+        when(client.delete(any())).thenThrow(new IOException());
+
+        userRepository.delete("1");
     }
 
 }

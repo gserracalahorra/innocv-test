@@ -10,6 +10,7 @@ import com.innocv.crm.user.repository.UserRepository;
 import com.innocv.crm.user.service.converter.ElasticsearchConverter;
 import com.innocv.crm.user.service.converter.UserConverter;
 import com.innocv.crm.user.service.domain.User;
+import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchResponse;
@@ -174,6 +175,19 @@ public class UserServiceTest {
         when(elasticsearchConverter.fromUpdateResponseToMap(updateResponse)).thenReturn(mock(Map.class));
 
         Map<String, Object> response = userService.update(UserMockFactory.createValidUser());
+
+        assertNotNull(response);
+    }
+
+    @Test
+    public void deleteSuccessTest() {
+        DeleteResponse deleteResponse = mock(DeleteResponse.class);
+
+        when(userRepository.delete(any())).thenReturn(deleteResponse);
+
+        when(elasticsearchConverter.fromDeleteResponseToMap(deleteResponse)).thenReturn(mock(Map.class));
+
+        Map<String, Object> response = userService.delete("1");
 
         assertNotNull(response);
     }

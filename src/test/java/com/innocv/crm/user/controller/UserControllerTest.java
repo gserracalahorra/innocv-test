@@ -44,13 +44,9 @@ public class UserControllerTest {
 
     @Test
     public void findUserByIdTest() {
-        User userDomain = mock(User.class);
+        when(userService.findById(any())).thenReturn(mock(User.class));
 
-        when(userService.findById(any())).thenReturn(userDomain);
-
-        UserModel userModel = mock(UserModel.class);
-
-        when(userConverter.fromDomainToModel(any())).thenReturn(userModel);
+        when(userConverter.fromDomainToModel(any())).thenReturn(mock(UserModel.class));
 
         UserModel userResponse = userController.find("1234");
 
@@ -82,9 +78,7 @@ public class UserControllerTest {
 
         when(userConverter.fromModelToDomain(any())).thenReturn(user);
 
-        Map<String, Object> responseMap = mock(Map.class);
-
-        when(userService.create(user)).thenReturn(responseMap);
+        when(userService.create(user)).thenReturn(mock(Map.class));
 
         ResponseEntity<Map<String, Object>> response = userController.create(mock(UserModel.class));
 
@@ -97,11 +91,18 @@ public class UserControllerTest {
 
         when(userConverter.fromModelToDomain(any())).thenReturn(user);
 
-        Map<String, Object> responseMap = mock(Map.class);
-
-        when(userService.update(user)).thenReturn(responseMap);
+        when(userService.update(user)).thenReturn(mock(Map.class));
 
         Map<String, Object> response = userController.update("1", mock(UserModel.class));
+
+        assertNotNull(response);
+    }
+
+    @Test
+    public void deleteTest() {
+        when(userService.delete(any())).thenReturn(mock(Map.class));
+
+        Map<String, Object> response = userController.delete("1");
 
         assertNotNull(response);
     }

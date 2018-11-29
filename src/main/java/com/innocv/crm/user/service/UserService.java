@@ -80,7 +80,8 @@ public class UserService {
         log.debug("Creating user {}", user);
         try {
             final String json = objectMapper.writeValueAsString(user);
-            Map<String, Object> indexResponse = elasticsearchConverter.fromIndexResponseToMap(userRepository.index(json));
+            Map<String, Object> indexResponse = elasticsearchConverter
+                    .fromIndexResponseToMap(userRepository.index(json));
             log.debug("User {} created", user);
             return indexResponse;
         } catch (JsonProcessingException e) {
@@ -90,10 +91,21 @@ public class UserService {
     }
 
     public Map<String, Object> update(User user) {
+        log.debug("Updating user {}", user.getId());
         Map<String, Object> userMap = new HashMap<>();
         userMap.put("name", user.getName());
         userMap.put("birthday", user.getBirthday());
-        return elasticsearchConverter.fromUpdateResponseToMap(userRepository.update(user.getId(), userMap));
+        Map<String, Object> updateResponse = elasticsearchConverter
+                .fromUpdateResponseToMap(userRepository.update(user.getId(), userMap));
+        log.debug("Updated user {}", user.getId());
+        return updateResponse;
     }
 
+    public Map<String, Object> delete(String id) {
+        log.debug("Deleting user {}", id);
+        Map<String, Object> deleteResponse = elasticsearchConverter
+                .fromDeleteResponseToMap(userRepository.delete(id));
+        log.debug("Deleted user {}", id);
+        return deleteResponse;
+    }
 }

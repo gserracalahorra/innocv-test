@@ -51,4 +51,9 @@ public class UserController {
         return userService.update(userConverter.fromModelToDomain(user));
     }
 
+    @DeleteMapping("/{id}")
+    public Map<String, Object> delete(@PathVariable("id") String id) {
+        return userService.delete(id);
+    }
+
 }

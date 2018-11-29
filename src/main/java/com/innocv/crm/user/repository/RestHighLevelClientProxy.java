@@ -1,6 +1,8 @@
 package com.innocv.crm.user.repository;
 
 import lombok.extern.slf4j.Slf4j;
+import org.elasticsearch.action.delete.DeleteRequest;
+import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexRequest;
@@ -45,6 +47,10 @@ public class RestHighLevelClientProxy {
 
     public UpdateResponse update(UpdateRequest updateRequest) throws IOException {
         return client.update(updateRequest);
+    }
+
+    public DeleteResponse delete(DeleteRequest deleteRequest) throws IOException {
+        return client.delete(deleteRequest);
     }
 
 }
