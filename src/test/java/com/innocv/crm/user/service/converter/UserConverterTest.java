@@ -1,6 +1,7 @@
 package com.innocv.crm.user.service.converter;
 
 import com.innocv.crm.user.service.domain.User;
+import org.elasticsearch.search.SearchHit;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;

@@ -1,5 +1,6 @@
 package com.innocv.crm.user;
 
+import com.innocv.crm.user.exception.ContentNotFoundException;
 import com.innocv.crm.user.exception.ResourceNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -14,7 +15,11 @@ public class GlobalHandler {
     @ResponseStatus(value= HttpStatus.NOT_FOUND, reason = "Requested resource does not exist")
     @ExceptionHandler(ResourceNotFoundException.class)
     public void resourceNotFound(ResourceNotFoundException e) {
-        log.info("User with id[{}] not found", e.getUserId());
+    }
+
+    @ResponseStatus(value= HttpStatus.NO_CONTENT, reason = "No data available")
+    @ExceptionHandler(ContentNotFoundException.class)
+    public void resourceNotFound(ContentNotFoundException e) {
     }
 
 }

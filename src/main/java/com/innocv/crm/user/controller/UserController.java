@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/v1/crm/user")
@@ -24,6 +26,13 @@ public class UserController {
     public UserModel find(@PathVariable("id") String id) {
         User user = userService.findById(id);
         return userConverter.fromDomainToModel(user);
+    }
+
+    @GetMapping("/all")
+    public List<UserModel> findAll() {
+        List<User> userList = userService.findAll();
+        return userList.stream().map(userConverter::fromDomainToModel)
+                .collect(Collectors.toList());
     }
 
 }

@@ -3,6 +3,8 @@ package com.innocv.crm.user.repository;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.get.GetResponse;
+import org.elasticsearch.action.search.SearchRequest;
+import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -27,6 +29,10 @@ public class RestHighLevelClientProxy {
 
     public GetResponse get(GetRequest getRequest) throws IOException {
         return client.get(getRequest);
+    }
+
+    public SearchResponse search(SearchRequest searchRequest) throws IOException {
+        return client.search(searchRequest);
     }
 
 }

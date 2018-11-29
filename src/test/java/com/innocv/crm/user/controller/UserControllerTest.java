@@ -1,12 +1,11 @@
 package com.innocv.crm.user.controller;
 
 import com.innocv.crm.user.controller.model.UserModel;
-import com.innocv.crm.user.controller.model.UserModelFactory;
+import com.innocv.crm.user.exception.ContentNotFoundException;
 import com.innocv.crm.user.exception.ResourceNotFoundException;
 import com.innocv.crm.user.service.UserService;
 import com.innocv.crm.user.controller.converter.UserConverter;
 import com.innocv.crm.user.service.domain.User;
-import com.innocv.crm.user.service.domain.UserDomainFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,6 +13,11 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.*;
 
@@ -35,12 +39,12 @@ public class UserControllerTest {
     }
 
     @Test
-    public void findCustomerByIdTest() {
-        User userDomain = UserDomainFactory.buildValid();
+    public void findUserByIdTest() {
+        User userDomain = mock(User.class);
 
         when(userService.findById(any())).thenReturn(userDomain);
 
-        UserModel userModel = UserModelFactory.buildValid();
+        UserModel userModel = mock(UserModel.class);
 
         when(userConverter.fromDomainToModel(any())).thenReturn(userModel);
 
@@ -50,9 +54,34 @@ public class UserControllerTest {
     }
 
     @Test(expected = ResourceNotFoundException.class)
-    public void findCustomerById_NotFoundTest() {
+    public void findUserById_NotFoundTest() {
         when(userService.findById(any())).thenThrow(new ResourceNotFoundException("1234"));
         userController.find("1234");
+    }
+
+    @Test
+    public void findAllByIdTest() {
+        List<User> domainList = new ArrayList<>();
+        domainList.add(mock(User.class));
+        domainList.add(mock(User.class));
+
+        when(userService.findAll()).thenReturn(domainList);
+
+        UserModel userModel = mock(UserModel.class);
+
+        when(userConverter.fromDomainToModel(any())).thenReturn(userModel);
+
+        List<UserModel> response = userController.findAll();
+
+        assertNotNull(response);
+        assertFalse(response.isEmpty());
+        assertEquals(2, response.size());
+    }
+
+    @Test(expected = ContentNotFoundException.class)
+    public void findCustomerById_NoContentTest() {
+        when(userService.findAll()).thenThrow(new ContentNotFoundException());
+        userController.findAll();
     }
 
 }
