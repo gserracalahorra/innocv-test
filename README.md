@@ -1,25 +1,29 @@
 # innocv-test
 Technical proof for InnoCV
 
+* Features
+
+- Operating System: Ubuntu
+
 * Startup application
 
-chmod 755 launch-application.sh
+- Launch services
 
-./launch-application.sh
+1. go to /innocv-test directory
 
+2. mvn install
 
+3. cd docker-compose
 
-2 - Create 'crm' index
+4. sudo docker-compose up
 
+- Create 'crm' index
 
+curl -X PUT -H 'Content-Type: application/json' -i http://localhost/crm --data '{
+"settings" : { "index" : { "number_of_shards" : 5, "number_of_replicas" : 1 } }
+}'
 
-
-
-
-
-
-
-
+* Usage
 
 - Create user
 
