@@ -16,7 +16,7 @@
 
 This application implements a user REST api. The architecture has the following features:
 
-* Docker Compose orchestration, in order to startup at the same time all the services. All services are disposed along two virtual networks:
+* Docker Compose orchestration in order to startup at the same time all the services. All services are disposed along two virtual networks:
 
     * crm-cluster-network: to this network belong two Elasticsearch nodes and a Nginx reverse proxy. Reverse proxy is the only one with visibility to the ES nodes. Reverse proxy balances the load between the ES nodes. ES nodes does not expose their ports outside. The only one exposing ports outside is the Nginx reverse proxy in order to preserve security.
 
