@@ -1,54 +1,76 @@
-# innocv-test
-Technical proof for InnoCV
+# InnoCV Challenge
 
-* Features
+## Technologies used
 
-- Operating System: Ubuntu
+* Ubuntu 18.04
+* JDK 1.8
+* Spring Boot 2.0.5.RELEASE
+* Apache Maven 3.5.2
+* Elasticsearch 6.5
+* Nginx
+* Docker Compose 1.23.1
+* JUnit, Mockito, PowerMockito and RestAssured
+* Lombock
 
-* Startup application
+## Architecture documentation
 
-- Launch services
+This application implements a user REST api. The architecture has the following features:
 
-1. sudo sysctl -w vm.max_map_count=262144
+* Docker Compose orchestration, in order to startup at the same time all the services. All services are disposed along two virtual networks:
 
-2. go to /innocv-test directory
+    * crm-cluster-network: to this network belong two Elasticsearch nodes and a Nginx reverse proxy. Reverse proxy is the only one with visibility to the ES nodes. Reverse proxy balances the load between the ES nodes. ES nodes does not expose their ports outside. The only one exposing ports outside is the Nginx reverse proxy in order to preserve security.
 
-3. mvn install
+    * crm-network: to this network belong the container with the crm-user-api Java application and the container with the reverse proxy. This network is intended to isolate client containers from ES nodes, allowing visibility only through the reverse proxy.
 
-4. cd docker-compose
+* Use of Spring Boot in order to build the REST Api. Use of profiles. JVM argument injection.
+* Exhaustive unit (with JUnit, Mockito and PowerMockito) and integration testing (with Rest Assured).
+* Three layer architecture: controller, service and repository, speaking each of them their own language. Converters in order to translate messages between tiers.
 
-5. sudo docker-compose up
 
-- Create 'crm' index
+## Installation steps
 
-curl -X PUT -H 'Content-Type: application/json' -i http://localhost/crm --data '{
-"settings" : { "index" : { "number_of_shards" : 5, "number_of_replicas" : 1 } }
-}'
+Prerrequisite: docker-compose installed.
 
-* Usage
+Go to base folder in the project:
 
-- Create user
+    mvn install
 
-curl -X POST -H 'Content-Type: application/json' -i http://localhost:8080/v1/crm/user --data '{
-"name": "Juan Ramon Martinez",
-"birthday": "1990-08-02"
-}'
+    cd docker-compose
 
-- Update user (replace {id} in the URI with the ID retrieved by the POST operation)
+    sudo docker-compose up
 
-curl -X PUT -H 'Content-Type: application/json' -i http://localhost:8080/v1/crm/user/{id} --data '{
-"name": "José Ramon Martinez",
-"birthday": "1990-08-02"
-}'
+When it finishes, create the 'crm' index:
 
-- Get user (replace {id} in the URI with the ID retrieved by the POST operation)
+        curl -X PUT -H 'Content-Type: application/json' -i http://localhost/crm --data '{
+        "settings" : { "index" : { "number_of_shards" : 5, "number_of_replicas" : 1 } }
+        }'
 
-curl -X GET -i http://localhost:8080/v1/crm/user/{id}
+Now, you have the system running on your local machine with an index called 'crm'.
 
-- Get all users
+## Usage
 
-curl -X GET -i http://localhost:8080/v1/crm/user/all
+1. Create user
 
--  Delete user
+        curl -X POST -H 'Content-Type: application/json' -i http://localhost:8080/v1/crm/user --data '{
+        "name": "Juan Ramon Martinez",
+        "birthday": "1990-08-02"
+        }'
 
-curl -X DELETE -i http://localhost:8080/v1/crm/user/{id}
+2. Update user (replace {id} in the URI with the ID retrieved by the POST operation)
+
+        curl -X PUT -H 'Content-Type: application/json' -i http://localhost:8080/v1/crm/user/{id} --data '{
+        "name": "José Ramon Martinez",
+        "birthday": "1990-08-02"
+        }'
+
+3. Get user (replace {id} in the URI with the ID retrieved by the POST operation)
+
+        curl -X GET -i http://localhost:8080/v1/crm/user/{id}
+
+4. Get all users
+
+        curl -X GET -i http://localhost:8080/v1/crm/user/all
+
+5. Delete user
+
+        curl -X DELETE -i http://localhost:8080/v1/crm/user/{id}
