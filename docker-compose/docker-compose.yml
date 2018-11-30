@@ -1,5 +1,17 @@
 version: '2.2'
 services:
+
+  crm-user-api:
+    image: openjdk:8
+    container_name: crm-user-api
+    ports:
+      - 8080:8080
+    volumes:
+      - ../target/crm-user-api.jar:/usr/src/crm/crm-user-api.jar
+    networks:
+      - crm-network
+    command: bash -c "cd /usr/src/crm/ && java -Dspring.profiles.active=DEV -Delasticsearch.crm.cluster=crm-cluster-reverse -jar crm-user-api.jar"
+
   crm-cluster-reverse:
     image: nginx:latest
     container_name: crm-cluster-reverse
@@ -10,6 +22,8 @@ services:
       - 443:443
     networks:
       - crm-cluster-network
+      - crm-network
+
   crm-node-1:
     image: docker.elastic.co/elasticsearch/elasticsearch:6.5.0
     container_name: crm-node-1
@@ -26,6 +40,7 @@ services:
       - esdata1:/usr/share/elasticsearch/data
     networks:
       - crm-cluster-network
+
   crm-node-2:
     image: docker.elastic.co/elasticsearch/elasticsearch:6.5.0
     container_name: crm-node-2
@@ -52,4 +67,6 @@ volumes:
 
 networks:
   crm-cluster-network:
+    driver: bridge
+  crm-network:
     driver: bridge

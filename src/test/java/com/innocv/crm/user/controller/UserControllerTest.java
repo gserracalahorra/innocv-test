@@ -1,10 +1,6 @@
 package com.innocv.crm.user.controller;
 
 import com.innocv.crm.user.controller.model.UserModel;
-import com.innocv.crm.user.exception.ContentNotFoundException;
-import com.innocv.crm.user.exception.InternalServerException;
-import com.innocv.crm.user.exception.ResourceNotFoundException;
-import com.innocv.crm.user.service.UserMockFactory;
 import com.innocv.crm.user.service.UserService;
 import com.innocv.crm.user.controller.converter.UserConverter;
 import com.innocv.crm.user.service.domain.User;
@@ -44,23 +40,13 @@ public class UserControllerTest {
 
     @Test
     public void findUserByIdTest() {
-        User userDomain = mock(User.class);
+        when(userService.findById(any())).thenReturn(mock(User.class));
 
-        when(userService.findById(any())).thenReturn(userDomain);
-
-        UserModel userModel = mock(UserModel.class);
-
-        when(userConverter.fromDomainToModel(any())).thenReturn(userModel);
+        when(userConverter.fromDomainToModel(any())).thenReturn(mock(UserModel.class));
 
         UserModel userResponse = userController.find("1234");
 
         assertNotNull(userResponse);
-    }
-
-    @Test(expected = ResourceNotFoundException.class)
-    public void findUserById_NotFoundTest() {
-        when(userService.findById(any())).thenThrow(new ResourceNotFoundException("1234"));
-        userController.find("1234");
     }
 
     @Test
@@ -82,38 +68,39 @@ public class UserControllerTest {
         assertEquals(2, response.size());
     }
 
-    @Test(expected = ContentNotFoundException.class)
-    public void findCustomerById_NoContentTest() {
-        when(userService.findAll()).thenThrow(new ContentNotFoundException());
-        userController.findAll();
-    }
-
     @Test
     public void createTest() {
         User user = mock(User.class);
 
         when(userConverter.fromModelToDomain(any())).thenReturn(user);
 
-        Map<String, Object> responseMap = mock(Map.class);
-
-        when(userService.create(user)).thenReturn(responseMap);
+        when(userService.create(user)).thenReturn(mock(Map.class));
 
         ResponseEntity<Map<String, Object>> response = userController.create(mock(UserModel.class));
 
         assertNotNull(response);
     }
 
-    @Test(expected = InternalServerException.class)
-    public void createFailTest() {
+    @Test
+    public void updateTest() {
         User user = mock(User.class);
 
         when(userConverter.fromModelToDomain(any())).thenReturn(user);
 
-        Map<String, Object> responseMap = mock(Map.class);
+        when(userService.update(user)).thenReturn(mock(Map.class));
 
-        when(userService.create(user)).thenThrow(new InternalServerException());
+        Map<String, Object> response = userController.update("1", mock(UserModel.class));
 
-        userController.create(mock(UserModel.class));
+        assertNotNull(response);
+    }
+
+    @Test
+    public void deleteTest() {
+        when(userService.delete(any())).thenReturn(mock(Map.class));
+
+        Map<String, Object> response = userController.delete("1");
+
+        assertNotNull(response);
     }
 
 }

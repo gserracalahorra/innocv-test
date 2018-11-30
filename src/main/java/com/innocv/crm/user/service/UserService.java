@@ -2,7 +2,6 @@ package com.innocv.crm.user.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.innocv.crm.user.exception.ContentNotFoundException;
 import com.innocv.crm.user.exception.InternalServerException;
 import com.innocv.crm.user.exception.ResourceNotFoundException;
 import com.innocv.crm.user.repository.UserRepository;
@@ -19,6 +18,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -72,14 +72,15 @@ public class UserService {
             return result;
         }
 
-        throw new ContentNotFoundException();
+        throw new ResourceNotFoundException();
     }
 
     public Map<String, Object> create(User user) {
         log.debug("Creating user {}", user);
         try {
             final String json = objectMapper.writeValueAsString(user);
-            Map<String, Object> indexResponse = elasticsearchConverter.fromIndexResponseToMap(userRepository.index(json));
+            Map<String, Object> indexResponse = elasticsearchConverter
+                    .fromIndexResponseToMap(userRepository.index(json));
             log.debug("User {} created", user);
             return indexResponse;
         } catch (JsonProcessingException e) {
@@ -88,4 +89,22 @@ public class UserService {
         }
     }
 
+    public Map<String, Object> update(User user) {
+        log.debug("Updating user {}", user.getId());
+        Map<String, Object> userMap = new HashMap<>();
+        userMap.put("name", user.getName());
+        userMap.put("birthday", user.getBirthday());
+        Map<String, Object> updateResponse = elasticsearchConverter
+                .fromUpdateResponseToMap(userRepository.update(user.getId(), userMap));
+        log.debug("Updated user {}", user.getId());
+        return updateResponse;
+    }
+
+    public Map<String, Object> delete(String id) {
+        log.debug("Deleting user {}", id);
+        Map<String, Object> deleteResponse = elasticsearchConverter
+                .fromDeleteResponseToMap(userRepository.delete(id));
+        log.debug("Deleted user {}", id);
+        return deleteResponse;
+    }
 }

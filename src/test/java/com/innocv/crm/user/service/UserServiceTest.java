@@ -3,16 +3,18 @@ package com.innocv.crm.user.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.innocv.crm.user.JsonStringFactory;
-import com.innocv.crm.user.exception.ContentNotFoundException;
 import com.innocv.crm.user.exception.InternalServerException;
+import com.innocv.crm.user.exception.MockException;
 import com.innocv.crm.user.exception.ResourceNotFoundException;
 import com.innocv.crm.user.repository.UserRepository;
 import com.innocv.crm.user.service.converter.ElasticsearchConverter;
 import com.innocv.crm.user.service.converter.UserConverter;
 import com.innocv.crm.user.service.domain.User;
+import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.junit.Before;
@@ -127,7 +129,7 @@ public class UserServiceTest {
         assertEquals("1990-08-02", interceptedUserMap.get("birthday"));
     }
 
-    @Test(expected = ContentNotFoundException.class)
+    @Test(expected = ResourceNotFoundException.class)
     public void findAllNoContentTest() {
         SearchResponse searchResponse = mock(SearchResponse.class);
 
@@ -164,12 +166,30 @@ public class UserServiceTest {
         userService.create(UserMockFactory.createValidUser());
     }
 
-    private class MockException extends JsonProcessingException {
+    @Test
+    public void updateSuccessTest() {
+        UpdateResponse updateResponse = mock(UpdateResponse.class);
 
-        public MockException() {
-            super("Mock exception message");
-        }
+        when(userRepository.update(any(), any())).thenReturn(updateResponse);
 
+        when(elasticsearchConverter.fromUpdateResponseToMap(updateResponse)).thenReturn(mock(Map.class));
+
+        Map<String, Object> response = userService.update(UserMockFactory.createValidUser());
+
+        assertNotNull(response);
+    }
+
+    @Test
+    public void deleteSuccessTest() {
+        DeleteResponse deleteResponse = mock(DeleteResponse.class);
+
+        when(userRepository.delete(any())).thenReturn(deleteResponse);
+
+        when(elasticsearchConverter.fromDeleteResponseToMap(deleteResponse)).thenReturn(mock(Map.class));
+
+        Map<String, Object> response = userService.delete("1");
+
+        assertNotNull(response);
     }
 
 }

@@ -7,7 +7,6 @@ public class InternalServerException extends RuntimeException {
     private String message;
 
     public InternalServerException() {
-
     }
 
     public InternalServerException(Class exceptionType, String message) {
