@@ -1,0 +1,13 @@
+elasticsearch.crm.cluster: localhost
+
+logging:
+  level:
+    com.innocv.crm: WARN
+
+---
+
+spring.profiles: DEV
+
+logging:
+  level:
+    com.innocv.crm: DEBUG
