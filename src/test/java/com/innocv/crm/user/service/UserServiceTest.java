@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.innocv.crm.user.JsonStringFactory;
 import com.innocv.crm.user.exception.InternalServerException;
+import com.innocv.crm.user.exception.MockException;
 import com.innocv.crm.user.exception.ResourceNotFoundException;
 import com.innocv.crm.user.repository.UserRepository;
 import com.innocv.crm.user.service.converter.ElasticsearchConverter;
@@ -189,14 +190,6 @@ public class UserServiceTest {
         Map<String, Object> response = userService.delete("1");
 
         assertNotNull(response);
-    }
-
-    private class MockException extends JsonProcessingException {
-
-        public MockException() {
-            super("Mock exception message");
-        }
-
     }
 
 }
