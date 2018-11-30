@@ -2,7 +2,6 @@ package com.innocv.crm.user.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.innocv.crm.user.exception.ContentNotFoundException;
 import com.innocv.crm.user.exception.InternalServerException;
 import com.innocv.crm.user.exception.ResourceNotFoundException;
 import com.innocv.crm.user.repository.UserRepository;
@@ -73,7 +72,7 @@ public class UserService {
             return result;
         }
 
-        throw new ContentNotFoundException();
+        throw new ResourceNotFoundException();
     }
 
     public Map<String, Object> create(User user) {

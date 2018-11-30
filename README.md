@@ -9,13 +9,15 @@ Technical proof for InnoCV
 
 - Launch services
 
-1. go to /innocv-test directory
+1. sudo sysctl -w vm.max_map_count=262144
 
-2. mvn install
+2. go to /innocv-test directory
 
-3. cd docker-compose
+3. mvn install
 
-4. sudo docker-compose up
+4. cd docker-compose
+
+5. sudo docker-compose up
 
 - Create 'crm' index
 

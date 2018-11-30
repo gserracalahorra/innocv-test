@@ -1,10 +1,6 @@
 package com.innocv.crm.user.controller;
 
 import com.innocv.crm.user.controller.model.UserModel;
-import com.innocv.crm.user.exception.ContentNotFoundException;
-import com.innocv.crm.user.exception.InternalServerException;
-import com.innocv.crm.user.exception.ResourceNotFoundException;
-import com.innocv.crm.user.service.UserMockFactory;
 import com.innocv.crm.user.service.UserService;
 import com.innocv.crm.user.controller.converter.UserConverter;
 import com.innocv.crm.user.service.domain.User;

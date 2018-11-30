@@ -3,7 +3,6 @@ package com.innocv.crm.user.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.innocv.crm.user.JsonStringFactory;
-import com.innocv.crm.user.exception.ContentNotFoundException;
 import com.innocv.crm.user.exception.InternalServerException;
 import com.innocv.crm.user.exception.ResourceNotFoundException;
 import com.innocv.crm.user.repository.UserRepository;
@@ -129,7 +128,7 @@ public class UserServiceTest {
         assertEquals("1990-08-02", interceptedUserMap.get("birthday"));
     }
 
-    @Test(expected = ContentNotFoundException.class)
+    @Test(expected = ResourceNotFoundException.class)
     public void findAllNoContentTest() {
         SearchResponse searchResponse = mock(SearchResponse.class);
 

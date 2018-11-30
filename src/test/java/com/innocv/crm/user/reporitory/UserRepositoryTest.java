@@ -3,7 +3,6 @@ package com.innocv.crm.user.reporitory;
 import com.innocv.crm.user.JsonStringFactory;
 import com.innocv.crm.user.exception.InternalServerException;
 import com.innocv.crm.user.exception.ResourceNotFoundException;
-import com.innocv.crm.user.repository.RestHighLevelClientProxy;
 import com.innocv.crm.user.repository.UserRepository;
 import org.elasticsearch.ElasticsearchStatusException;
 import org.elasticsearch.action.delete.DeleteResponse;
@@ -11,12 +10,14 @@ import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.update.UpdateResponse;
+import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.rest.RestStatus;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.powermock.api.mockito.PowerMockito;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.io.IOException;
@@ -31,8 +32,7 @@ public class UserRepositoryTest {
 
     private UserRepository userRepository = new UserRepository();
 
-    @Mock
-    private RestHighLevelClientProxy client;
+    private RestHighLevelClient client = PowerMockito.mock(RestHighLevelClient.class);
 
     @Before
     public void before() {

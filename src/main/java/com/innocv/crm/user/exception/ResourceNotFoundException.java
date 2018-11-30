@@ -7,6 +7,9 @@ public class ResourceNotFoundException extends RuntimeException {
 
     private String userId;
 
+    public ResourceNotFoundException() {
+    }
+
     public ResourceNotFoundException(String userId) {
         this.userId = userId;
     }
