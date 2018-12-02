@@ -1,34 +1,52 @@
-# innocv-test
-Technical proof for InnoCV
+# InnoCV Challenge
 
-chmod 755 launch-application.sh
+## Technologies used
 
-1 - Startup containers
+* Ubuntu 18.04
+* JDK 1.8
+* Spring Boot 2.0.5.RELEASE
+* Spring Web Flux
+* Embbeded MongoDB
+* JUnit, Mockito and RestAssured
+* Lombock
 
-sudo docker-compose up
+## Architecture documentation
 
-2 - Create 'crm' index
+This application is a proof of concept of a Rest API using Spring Web Flux. It implements a Rest API with CRUD operations over the 'user' resource. An embedded MongoDB is used when the Spring Context loads.
 
-curl -X PUT -H 'Content-Type: application/json' -i http://localhost/crm --data '{
-    "settings" : {
-        "index" : {
-            "number_of_shards" : 5,
-            "number_of_replicas" : 1
-        }
-    }
+
+## Installation steps
+
+Go to base folder in the project:
+
+    mvn install
+
+    java -jar target/crm-user-api.jar
+
+## Usage
+
+1. Create user
+
+        curl -X POST -H 'Content-Type: application/json' -i http://localhost:8080/v1/crm/user --data '{
+"name": "Guillem Serra Calahorra",
+"birthday": "1990-08-02"
 }'
 
-3 - Create 'user' type
+2. Update user (replace {id} in the URI with the ID retrieved by the POST operation)
 
-curl -X PUT -H 'Content-Type: application/json' -i http://localhost/crm/_mapping/user --data '{
-    "properties": {
-        "name": {
-            "type": "text"
-        },
-        "birthday": {
-            "type": "text"
-        }
-    }
+        curl -X PUT -H 'Content-Type: application/json' -i http://localhost:8080/v1/crm/user/{id} --data '{
+"name": "Octavi Serra Calahorra",
+"birthday": "1989-04-18"
 }'
 
-4 - Test the endpoints
+3. Get user (replace {id} in the URI with the ID retrieved by the POST operation)
+
+        curl -X GET -i http://localhost:8080/v1/crm/user/{id}
+
+4. Get all users
+
+        curl -X GET -i http://localhost:8080/v1/crm/user/all
+
+5. Delete user
+
+        curl -X DELETE -i http://localhost:8080/v1/crm/user/{id}
