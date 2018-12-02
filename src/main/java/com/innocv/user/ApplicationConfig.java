@@ -1,24 +1,27 @@
 package com.innocv.user;
 
-import org.apache.http.HttpHost;
-import org.elasticsearch.client.RestClient;
-import org.elasticsearch.client.RestHighLevelClient;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import com.mongodb.MongoClient;
+import cz.jirutka.spring.embedmongo.EmbeddedMongoFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.mongodb.core.MongoTemplate;
+
+import java.io.IOException;
 
 @Configuration
-@ConfigurationProperties
 public class ApplicationConfig {
 
-    @Value("${elasticsearch.crm.cluster}")
-    private String crmCluster;
+    private static final String MONGO_DB_URL = "localhost";
 
-    @Bean(name = "crm-cluster-client")
-    public RestHighLevelClient restHighLevelClient() {
-        return new RestHighLevelClient(
-            RestClient.builder(new HttpHost(crmCluster)));
+    private static final String MONGO_DB_NAME = "embeded_db";
+
+    @Bean
+    public MongoTemplate mongoTemplate() throws IOException {
+        EmbeddedMongoFactoryBean mongo = new EmbeddedMongoFactoryBean();
+        mongo.setBindIp(MONGO_DB_URL);
+        MongoClient mongoClient = mongo.getObject();
+        MongoTemplate mongoTemplate = new MongoTemplate(mongoClient, MONGO_DB_NAME);
+        return mongoTemplate;
     }
 
 }
