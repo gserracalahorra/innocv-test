@@ -31,7 +31,7 @@ import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class RestIntegrationTest {
+public class UserRestApiIntegrationTest {
 
     @LocalServerPort
     private int port;
@@ -65,7 +65,7 @@ public class RestIntegrationTest {
 
         when(client.search(any())).thenReturn(searchResponse);
 
-        given().port(port).get("/v1/crm/user/all").then()
+        given().port(port).get("/user/all").then()
                 .assertThat()
                 .body(containsString("Guillem Serra"))
                 .statusCode(is(200));
@@ -82,7 +82,7 @@ public class RestIntegrationTest {
 
         when(client.search(any())).thenReturn(searchResponse);
 
-        given().port(port).get("/v1/crm/user/all").then()
+        given().port(port).get("/user/all").then()
                 .assertThat()
                 .statusCode(is(404));
     }
@@ -95,7 +95,7 @@ public class RestIntegrationTest {
 
         when(client.search(any())).thenThrow(ioException);
 
-        given().port(port).get("/v1/crm/user/all").then()
+        given().port(port).get("/user/all").then()
                 .assertThat()
                 .statusCode(is(500));
     }
@@ -110,7 +110,7 @@ public class RestIntegrationTest {
 
         when(client.get(any())).thenReturn(getResponse);
 
-        given().port(port).get("/v1/crm/user/12345678").then()
+        given().port(port).get("/user/12345678").then()
                 .assertThat()
                 .body(containsString("Guillem Serra"))
                 .statusCode(is(200));
@@ -124,7 +124,7 @@ public class RestIntegrationTest {
 
         when(client.get(any())).thenReturn(getResponse);
 
-        given().port(port).get("/v1/crm/user/12345678").then()
+        given().port(port).get("/user/12345678").then()
                 .assertThat()
                 .statusCode(is(404));
     }
@@ -134,7 +134,7 @@ public class RestIntegrationTest {
 
         when(client.get(any())).thenThrow(mock(IOException.class));
 
-        given().port(port).get("/v1/crm/user/12345678").then()
+        given().port(port).get("/user/12345678").then()
                 .assertThat()
                 .statusCode(is(500));
     }
@@ -155,7 +155,7 @@ public class RestIntegrationTest {
         given().port(port)
                 .header("Content-Type", "application/json")
                 .body(new UserModel(null, "Guillem Serra", LocalDate.now()))
-                .post("/v1/crm/user")
+                .post("/user")
                 .then()
                 .assertThat()
                 .statusCode(is(201));
@@ -168,7 +168,7 @@ public class RestIntegrationTest {
         given().port(port)
                 .header("Content-Type", "application/json")
                 .body(new UserModel(null, "Guillem Serra", LocalDate.now()))
-                .post("/v1/crm/user")
+                .post("/user")
                 .then()
                 .assertThat()
                 .statusCode(is(500));
@@ -190,7 +190,7 @@ public class RestIntegrationTest {
         given().port(port)
                 .header("Content-Type", "application/json")
                 .body(new UserModel(null, "Guillem Serra", LocalDate.now()))
-                .put("/v1/crm/user/12345678")
+                .put("/user/12345678")
                 .then()
                 .assertThat()
                 .statusCode(is(200));
@@ -207,7 +207,7 @@ public class RestIntegrationTest {
         given().port(port)
                 .header("Content-Type", "application/json")
                 .body(new UserModel(null, "Guillem Serra", LocalDate.now()))
-                .put("/v1/crm/user/12345678")
+                .put("/user/12345678")
                 .then()
                 .assertThat()
                 .statusCode(is(404));
@@ -220,7 +220,7 @@ public class RestIntegrationTest {
         given().port(port)
                 .header("Content-Type", "application/json")
                 .body(new UserModel(null, "Guillem Serra", LocalDate.now()))
-                .put("/v1/crm/user/12345678")
+                .put("/user/12345678")
                 .then()
                 .assertThat()
                 .statusCode(is(500));
@@ -240,7 +240,7 @@ public class RestIntegrationTest {
         when(client.delete(any())).thenReturn(deleteResponse);
 
         given().port(port)
-                .delete("/v1/crm/user/12345678")
+                .delete("/user/12345678")
                 .then()
                 .assertThat()
                 .statusCode(is(200));
@@ -251,7 +251,7 @@ public class RestIntegrationTest {
         when(client.update(any())).thenThrow(mock(IOException.class));
 
         given().port(port)
-                .delete("/v1/crm/user/12345678")
+                .delete("/user/12345678")
                 .then()
                 .assertThat()
                 .statusCode(is(500));

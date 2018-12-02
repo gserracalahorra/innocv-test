@@ -4,10 +4,11 @@
 
 * Ubuntu 18.04
 * JDK 1.8
-* Spring Boot 2.0.5.RELEASE
 * Apache Maven 3.5.2
+* Spring Boot 2.0.5.RELEASE
+* Springfox Swagger 2.9.2
 * Elasticsearch 6.5
-* Nginx
+* Nginx (always latest version)
 * Docker Compose 1.23.1
 * JUnit, Mockito, PowerMockito and RestAssured
 * Lombock
@@ -25,7 +26,7 @@ This application implements a user REST api. The architecture has the following 
 * Use of Spring Boot in order to build the REST Api. Use of profiles. JVM argument injection.
 * Exhaustive unit (with JUnit, Mockito and PowerMockito) and integration testing (with Rest Assured).
 * Three layer architecture: controller, service and repository, speaking each of them their own language. Converters in order to translate messages between tiers.
-
+* Rest API documentation with Swagger.
 
 ## Installation steps
 
@@ -49,28 +50,40 @@ Now, you have the system running on your local machine with an index called 'crm
 
 ## Usage
 
-1. Create user
+* CRUD operations:
 
-        curl -X POST -H 'Content-Type: application/json' -i http://localhost:8080/v1/crm/user --data '{
-        "name": "Juan Ramon Martinez",
-        "birthday": "1990-08-02"
-        }'
+    1. Create user
 
-2. Update user (replace {id} in the URI with the ID retrieved by the POST operation)
+            curl -X POST -H 'Content-Type: application/json' -i http://localhost:8080/v1/crm/user --data '{
+            "name": "Juan Ramon Martinez",
+            "birthday": "1990-08-02"
+            }'
 
-        curl -X PUT -H 'Content-Type: application/json' -i http://localhost:8080/v1/crm/user/{id} --data '{
-        "name": "José Ramon Martinez",
-        "birthday": "1990-08-02"
-        }'
+    2. Update user (replace {id} in the URI with the ID retrieved by the POST operation)
 
-3. Get user (replace {id} in the URI with the ID retrieved by the POST operation)
+            curl -X PUT -H 'Content-Type: application/json' -i http://localhost:8080/v1/crm/user/{id} --data '{
+            "name": "José Ramon Martinez",
+            "birthday": "1990-08-02"
+            }'
 
-        curl -X GET -i http://localhost:8080/v1/crm/user/{id}
+    3. Get user (replace {id} in the URI with the ID retrieved by the POST operation)
 
-4. Get all users
+            curl -X GET -i http://localhost:8080/v1/crm/user/{id}
 
-        curl -X GET -i http://localhost:8080/v1/crm/user/all
+    4. Get all users
 
-5. Delete user
+            curl -X GET -i http://localhost:8080/v1/crm/user/all
 
-        curl -X DELETE -i http://localhost:8080/v1/crm/user/{id}
+    5. Delete user
+
+            curl -X DELETE -i http://localhost:8080/v1/crm/user/{id}
+
+* Rest API doeumentation:
+
+    1. Query the crm-user-api specifications...
+
+            curl -X GET -i 'http://localhost:8080/v2/api-docs?group=crm-user-api'
+
+    2. Or display the swagger-ui.html user interface:
+
+            http://localhost:8080/swagger-ui.html

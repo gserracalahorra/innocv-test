@@ -1,1 +1,3 @@
 spring.application.name: crm-user-api
+
+server.servlet.context-path: /v1/crm
