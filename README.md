@@ -28,16 +28,16 @@ Go to base folder in the project:
 1. Create user
 
         curl -X POST -H 'Content-Type: application/json' -i http://localhost:8080/v1/crm/user --data '{
-"name": "Guillem Serra Calahorra",
-"birthday": "1990-08-02"
-}'
+        "name": "Guillem Serra Calahorra",
+        "birthday": "1990-08-02"
+        }'
 
 2. Update user (replace {id} in the URI with the ID retrieved by the POST operation)
 
         curl -X PUT -H 'Content-Type: application/json' -i http://localhost:8080/v1/crm/user/{id} --data '{
-"name": "Octavi Serra Calahorra",
-"birthday": "1989-04-18"
-}'
+        "name": "Octavi Serra Calahorra",
+        "birthday": "1989-04-18"
+        }'
 
 3. Get user (replace {id} in the URI with the ID retrieved by the POST operation)
 
