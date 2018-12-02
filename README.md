@@ -9,10 +9,10 @@
 * Springfox Swagger 2.9.2
 * Elasticsearch 6.5
 * Nginx (always latest version)
+* Travis CI
 * Docker Compose 1.23.1
 * JUnit, Mockito, PowerMockito and RestAssured
 * Lombock
-* Travis CI
 
 ## Architecture documentation
 
