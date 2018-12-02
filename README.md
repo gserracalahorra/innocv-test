@@ -12,6 +12,7 @@
 * Docker Compose 1.23.1
 * JUnit, Mockito, PowerMockito and RestAssured
 * Lombock
+* Travis CI
 
 ## Architecture documentation
 
@@ -27,6 +28,7 @@ This application implements a user REST api. The architecture has the following 
 * Exhaustive unit (with JUnit, Mockito and PowerMockito) and integration testing (with Rest Assured).
 * Three layer architecture: controller, service and repository, speaking each of them their own language. Converters in order to translate messages between tiers.
 * Rest API documentation with Swagger.
+* Continuos Integration through Travis CI. To push to central repository fires the build of the maven project
 
 ## Installation steps
 
