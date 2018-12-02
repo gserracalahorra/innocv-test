@@ -1,7 +1,7 @@
-package com.innocv.user;
+package com.innocv.crm.user;
 
-import com.innocv.user.exception.ContentNotFoundException;
-import com.innocv.user.exception.ResourceNotFoundException;
+import com.innocv.crm.user.exception.ResourceNotFoundException;
+import com.innocv.crm.user.exception.ContentNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;

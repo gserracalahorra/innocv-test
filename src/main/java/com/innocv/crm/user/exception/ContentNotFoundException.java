@@ -1,4 +1,4 @@
-package com.innocv.user.exception;
+package com.innocv.crm.user.exception;
 
 public class ContentNotFoundException extends RuntimeException {
 

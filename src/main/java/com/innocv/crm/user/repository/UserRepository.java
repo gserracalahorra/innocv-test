@@ -1,6 +1,6 @@
-package com.innocv.user.repository;
+package com.innocv.crm.user.repository;
 
-import com.innocv.user.controller.model.User;
+import com.innocv.crm.user.controller.model.User;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import org.springframework.stereotype.Repository;
 

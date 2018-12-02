@@ -1,9 +1,9 @@
-package com.innocv.user.controller;
+package com.innocv.crm.user.controller;
 
-import com.innocv.user.controller.model.User;
-import com.innocv.user.exception.ContentNotFoundException;
-import com.innocv.user.exception.ResourceNotFoundException;
-import com.innocv.user.repository.UserRepository;
+import com.innocv.crm.user.controller.model.User;
+import com.innocv.crm.user.exception.ContentNotFoundException;
+import com.innocv.crm.user.exception.ResourceNotFoundException;
+import com.innocv.crm.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

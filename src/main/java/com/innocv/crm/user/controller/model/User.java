@@ -1,4 +1,4 @@
-package com.innocv.user.controller.model;
+package com.innocv.crm.user.controller.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

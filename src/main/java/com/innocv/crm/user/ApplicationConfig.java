@@ -1,4 +1,4 @@
-package com.innocv.user;
+package com.innocv.crm.user;
 
 import com.mongodb.MongoClient;
 import cz.jirutka.spring.embedmongo.EmbeddedMongoFactoryBean;
